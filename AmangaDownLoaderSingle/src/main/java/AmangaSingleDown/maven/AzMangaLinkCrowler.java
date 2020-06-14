@@ -8,12 +8,15 @@ import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.jsoup.HttpStatusException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 
 /**
  * @author sigre
@@ -219,9 +222,9 @@ public class AzMangaLinkCrowler {
 	 */
 	protected List<String> getAzMangaPageList(String strUrl,gamenDTO DTO)
 			throws IOException, InterruptedException, UnknownHostException, HttpStatusException, IllegalArgumentException {
-		
+
 		Document document = accessUrl(strUrl, false);
-		
+
 		Elements listUrls = document.getElementsByClass("entry-title");
 		List<String> result = new ArrayList<String>();
 		for (Element e : listUrls) {
@@ -239,7 +242,24 @@ public class AzMangaLinkCrowler {
 		int timeoutCount = 0;
 
 		try {
-			result = Jsoup.connect(url).get();
+			System.out.println("pageCheck1");
+
+			System.setProperty("webdriver.chrome.driver", "C:\\Users\\ノボル\\git\\AzManga\\AmangaDownLoaderSingle\\lib\\chromedriver.exe");
+			WebDriver webDriver = new ChromeDriver();
+			webDriver.get(url);
+			System.out.println("ここを通った１");
+	        // 最大5秒間、ページが完全に読み込まれるまで待つ
+	        webDriver.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);
+
+	        // 検証
+	        System.out.println(webDriver.getTitle());
+
+			
+			result = Jsoup.connect(url)
+					.userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:49.0) Gecko/20100101 Firefox/49.0")
+					.ignoreHttpErrors(false).followRedirects(true).timeout(40000)
+					.ignoreContentType(true).get();
+			System.out.println("ここを通った２；" + url );
 			Thread.sleep(1000);
 		} catch (SocketTimeoutException e) {
 
@@ -252,6 +272,9 @@ public class AzMangaLinkCrowler {
 			System.out.println("Timeout対策で10×"+ timeoutCount + "秒間停止");
 			Thread.sleep(timeoutCount * 10 * 1000);
 			result = accessUrl(url, isUploader);
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.toString());
 		}
 
 		return result;

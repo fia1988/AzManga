@@ -51,18 +51,18 @@ public class mainGamen extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		renameListFileCreateFolderPath = new JTextField();
+		renameListFileCreateFolderPath = new JTextField("D:\\01.kabu_backup\\00.dropbox\\Dropbox\\03.漫画");
 		renameListFileCreateFolderPath.setBounds(49, 130, 334, 25);
 
 		contentPane.add(renameListFileCreateFolderPath);
 		renameListFileCreateFolderPath.setColumns(10);
 
-		mangaURL = new JTextField();
+		mangaURL = new JTextField("一般漫画");
 		mangaURL.setColumns(10);
 		mangaURL.setBounds(49, 55, 334, 25);
 		contentPane.add(mangaURL);
 
-		pageNum = new JTextField();
+		pageNum = new JTextField("17");
 		pageNum.setColumns(10);
 		pageNum.setBounds(462, 55, 50, 25);
 		contentPane.add(pageNum);
