@@ -9,9 +9,17 @@ public class gamenDTO {
 	String mangaURL;
 	int mangURL_page;
 
+	boolean checkErrLog = false;
 
 
 
+
+	public boolean isCheckErrLog() {
+		return checkErrLog;
+	}
+	public void setCheckErrLog(boolean checkErrLog) {
+		this.checkErrLog = checkErrLog;
+	}
 	public String getReNameListFileCreateFolderPath() {
 		return reNameListFileCreateFolderPath;
 	}

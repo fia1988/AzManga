@@ -18,7 +18,7 @@ public class makeText {
 
 		List<List<String>> umeResult = new ArrayList <List<String>>();
 		try {
-
+			//「DTO.getMangaURL()」は漫画、小説など。。。
 			umeResult = umeTool.getSingleMangaList(DTO.getMangaURL(), 1, DTO.getMangURL_page(),DTO);
 
 		} catch (IllegalArgumentException e) {

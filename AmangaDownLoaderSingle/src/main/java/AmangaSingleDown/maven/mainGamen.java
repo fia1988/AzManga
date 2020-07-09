@@ -58,11 +58,14 @@ public class mainGamen extends JFrame {
 		renameListFileCreateFolderPath.setColumns(10);
 
 		mangaURL = new JTextField("一般漫画");
+		mangaURL = new JTextField("一般漫画,少女漫画,小説,画集,成年書籍,その他,小説-成年書籍");
+		mangaURL = new JTextField("一般漫画,少女漫画,小説,画集,成年書籍,その他");
+
 		mangaURL.setColumns(10);
 		mangaURL.setBounds(49, 55, 334, 25);
 		contentPane.add(mangaURL);
 
-		pageNum = new JTextField("17");
+		pageNum = new JTextField("15");
 		pageNum.setColumns(10);
 		pageNum.setBounds(462, 55, 50, 25);
 		contentPane.add(pageNum);
@@ -79,7 +82,7 @@ public class mainGamen extends JFrame {
 		lblrenamefiletxt.setBounds(49, 95, 319, 19);
 		contentPane.add(lblrenamefiletxt);
 
-		JLabel label_1 = new JLabel("置換ファイルフルパス（ファイル名含む）");
+		JLabel label_1 = new JLabel("個別記事URL");
 		label_1.setBounds(49, 252, 334, 19);
 		contentPane.add(label_1);
 
@@ -93,30 +96,35 @@ public class mainGamen extends JFrame {
 		reNameListFilePath.setText(File.separator + CONST.MAKEFILE);
 		contentPane.add(reNameListFilePath);
 
-		renamedFolderPath = new JTextField();
+		renamedFolderPath = new JTextField("D:\\01.kabu_backup\\00.dropbox\\Dropbox\\03.漫画");
 		renamedFolderPath.setColumns(10);
 		renamedFolderPath.setBounds(49, 355, 334, 25);
 		contentPane.add(renamedFolderPath);
 
 
-		JButton button = new JButton("置換ファイル一覧作成");
+		JButton button = new JButton("「01.output.txt」作成");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				gamenDTO DTO = new gamenDTO();
+				DTO.setCheckErrLog(false);
 				String DTOresult = setDTO(DTO,true);
 				renameCreateResult.setText(DTOresult);
 				reNameListFilePath.setText(DTO.getReNameListFileCreateFolderPath() + File.separator + CONST.MAKEFILE);
 				renamedFolderPath.setText(DTO.getReNameListFileCreateFolderPath());
-				System.out.println("aaaaaaaaaa");
+				System.out.println("「01.output.txt」作成処理");
 
 				if (!DTOresult.equals("成功")){
 					return;
 				}
 
 				try {
-					makeText makeT = new makeText();
-					renameCreateResult.setText(makeT.makeTextMain(DTO));
-					makeT = new makeText();
+//					makeText makeT = new makeText();
+//					renameCreateResult.setText(makeT.makeTextMain(DTO));
+
+					//ここから漫画などの取り込みを開始する
+					AzMangaLinkGetV2 azmanga = new AzMangaLinkGetV2(DTO);
+					renameCreateResult.setText(azmanga.mainGetURL_main(DTO));
+//					makeT = new makeText();
 				} catch (Exception e2) {
 					commonAP.writeInErrLog(e2,DTO.getReNameListFileCreateFolderPath(),CONST.FATAL_ERR	);
 					// TODO: handle exception
@@ -131,21 +139,31 @@ public class mainGamen extends JFrame {
 		contentPane.add(button);
 
 
-		JButton button_1 = new JButton("ファイルの置換開始");
+		JButton button_1 = new JButton("テスト用：個別ページ処理開始");
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				gamenDTO DTO = new gamenDTO();
+				DTO.setCheckErrLog(true);
 				String DTOresult = setDTO(DTO,false);
+
+				System.out.println("テスト用：個別ページ処理開始");
+
+
 
 				renameDoresult.setText(DTOresult);
 				if (!DTOresult.equals("成功")){
 					return;
 				}
 
-				renameDo aaa = new renameDo();
-				String resultRename = aaa.renameDoMain(DTO);
-				renameDoresult.setText(resultRename);
-				aaa = new renameDo();
+				AzMangaLinkGetV2 azmanga = new AzMangaLinkGetV2(DTO);
+				azmanga.getURL_Page_Individual(DTO);
+
+
+
+//				renameDo aaa = new renameDo();
+//				String resultRename = aaa.renameDoMain(DTO);
+				renameDoresult.setText("ここに結果");
+//				aaa = new renameDo();
 
 			}
 		});
@@ -182,15 +200,16 @@ public class mainGamen extends JFrame {
 
 			DTO.setReNamedFolderPath(renamedFolderPath.getText());
 			DTO.setReNameListFilePath(reNameListFilePath.getText());
-
+			DTO.setReNameListFileCreateFolderPath(renamedFolderPath.getText());
 			File file =  new File(DTO.getReNamedFolderPath());
 
 			if (file.isDirectory()==false){
 				return "フォルダが存在しない";
+
 			}
 			file =  new File(DTO.getReNameListFilePath());
 			if (file.isFile()==false){
-				return "ファイル存在しない";
+				return "成功";
 			}
 
 		}

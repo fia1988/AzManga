@@ -4,18 +4,18 @@
 package AmangaSingleDown.maven;
 
 import java.io.IOException;
-import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.jsoup.HttpStatusException;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 /**
@@ -52,6 +52,7 @@ public class AzMangaLinkCrowler {
 		List<List<String>> result = new ArrayList<List<String>>();
 		String strUploaderName = "Uploaded";
 
+		//URLを1ページから順番に処理する。
 		for (int i = start; i <= end; i++) {
 			String strUrl = "http://www.a-zmanga.net/archives/category/" + category + "/page/" + i;
 //			System.out.println("StrURL: " + strUrl);
@@ -77,6 +78,13 @@ public class AzMangaLinkCrowler {
 		List<String> listUrlInIchiran = new ArrayList<String>();
 
 		try {
+			
+			//URLにあるすべてのブログページを取得
+			
+			
+			//漫画ページ内で漫画URLを取得
+			
+			
 			listUrlInIchiran= getAzMangaPageList(strUrl,DTO);
 		} catch (HttpStatusException e) {
 //			System.out.println("Link is Dead :" + strUrl);
@@ -242,36 +250,93 @@ public class AzMangaLinkCrowler {
 		int timeoutCount = 0;
 
 		try {
-			System.out.println("pageCheck1");
-
 			System.setProperty("webdriver.chrome.driver", "C:\\Users\\ノボル\\git\\AzManga\\AmangaDownLoaderSingle\\lib\\chromedriver.exe");
+			
+			
 			WebDriver webDriver = new ChromeDriver();
+			System.out.println("stay");
+			
 			webDriver.get(url);
+			
 			System.out.println("ここを通った１");
 	        // 最大5秒間、ページが完全に読み込まれるまで待つ
 	        webDriver.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);
+	        
+	        //10秒待つ。それでも「Just a moment...」がでたらもう一回トライ
+	        Thread.sleep(10000);
 
 	        // 検証
 	        System.out.println(webDriver.getTitle());
-
-			
-			result = Jsoup.connect(url)
-					.userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:49.0) Gecko/20100101 Firefox/49.0")
-					.ignoreHttpErrors(false).followRedirects(true).timeout(40000)
-					.ignoreContentType(true).get();
-			System.out.println("ここを通った２；" + url );
+	        List<WebElement> elements = webDriver.findElements(By.className("entry-title"));
+	        WebElement aTag = elements.get(0).findElement(By.tagName("a"));
+	        url = aTag.getAttribute("href");
+	        webDriver.get(url);
+	        //[吾峠呼世晴] 鬼滅の刃 第01-20巻 - a-zmanga.net
+	        //[小武] 女主任・岸見栄子 第01-05巻 - a-zmanga.net
+	        Thread.sleep(10000);
+	        webDriver.get("http://www.a-zmanga.net/archives/59506");
+//	        Thread.sleep(10000);
+	        //UPLOADのURLの一覧を取得
+	        List<WebElement> listelements = webDriver.findElements(By.className("entry-content"));
+	        List<WebElement> targetElement = listelements.get(0).findElements(By.tagName("p"));
+	        Thread.sleep(10000);
+	        WebElement titeleElement = webDriver.findElement(By.id("content"));
+	        String[] title = titeleElement.getText().split("\n", 0);
+	        System.out.println("タイトル："+title[0]);
+	        
+	        for (WebElement element: targetElement ) {
+	        	
+	        	
+	            if (element.getText().contains("Alfafile")) {
+	            	List<WebElement> urlElement = element.findElements(By.tagName("a"));
+	            	String[] fileNameAllay = element.getText().split("\n", 0);
+	            	for (int i=0; i < fileNameAllay.length ; i++){
+	            		if ( i != fileNameAllay.length - 1){
+	            			System.out.println(urlElement.get(i).getAttribute("href") + "," + (fileNameAllay.length - 1) + "," + "Alfafile" + "," + "[生ファイル名]," + fileNameAllay[i+1] + "," +webDriver.getTitle() + "," + "[blogURL]" + "," + "[ファイルキー],[ファイル生死]");
+	            		}
+	            	}
+	            }
+	            
+	            
+	            if (element.getText().contains("Uploaded")) {
+	            	List<WebElement> urlElement = element.findElements(By.tagName("a"));
+	            	String[] fileNameAllay = element.getText().split("\n", 0);
+	            	for (int i=0; i < fileNameAllay.length ; i++){
+	            		if ( i != fileNameAllay.length - 1){
+	            			System.out.println(urlElement.get(i).getAttribute("href") + "," + (fileNameAllay.length - 1) + "," + "Uploaded" + "," + "[生ファイル名]," + fileNameAllay[i+1] + "," +webDriver.getTitle() + "," + "[blogURL]" + "," + "[ファイルキー],[ファイル生死]");
+	            		}
+	            	}
+	            }
+	            
+	            
+	        }
+	        
+	        //WebElement listaTag = listelements.get(0).findElement(By.tagName("a"));
+	 
+	        //UPLOADED
+	        //死亡時はnull
+	        //死亡時はorg.openqa.selenium.NoSuchElementException
+	        //webDriver.getTitle()==uploaded.net
+	        webDriver.get("http://ul.to/ngk51s4g");
+//	        webDriver.get("http://ul.to/aug3808g");
+	        System.out.println(webDriver.getTitle());
+	        List<WebElement> UpLelements = webDriver.findElements(By.className("title"));
+	        WebElement UpaTag = UpLelements.get(0).findElement(By.id("filename"));
+	        System.out.println("aaaaa:" + UpaTag.getText());
+	        
+	        //Alfafile
+	        //webDriver.getTitle() == ページが見つかりません | Alfafile.net
+	        webDriver.get("https://alfafile.net/file/8vKmS");
+//	        webDriver.get("http://alfafile.net/file/8ea6u");
+	        List<WebElement> Alelements = webDriver.findElements(By.className("title"));
+	        System.out.println(webDriver.getTitle());
+	        WebElement AlaTag = Alelements.get(0).findElement(By.tagName("strong"));
+	        System.out.println(AlaTag.getAttribute("title"));
+	        
+	        //webDriver.close();
+	        //webDrivera.close();
+	        System.out.println("ここを通った２；" + url );
 			Thread.sleep(1000);
-		} catch (SocketTimeoutException e) {
-
-			if (isUploader) {
-				timeoutCount = ++timeoutCountUp;
-
-			} else {
-				timeoutCount = ++timeoutCountAz;
-			}
-			System.out.println("Timeout対策で10×"+ timeoutCount + "秒間停止");
-			Thread.sleep(timeoutCount * 10 * 1000);
-			result = accessUrl(url, isUploader);
 		} catch (Exception e) {
 			// TODO: handle exception
 			System.out.println(e.toString());
