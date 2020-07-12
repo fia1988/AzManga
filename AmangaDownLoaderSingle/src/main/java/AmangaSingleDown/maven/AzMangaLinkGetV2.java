@@ -31,26 +31,26 @@ public class AzMangaLinkGetV2 {
 
 	//コンストラクタ
 	public AzMangaLinkGetV2(gamenDTO DTO) {
-		
+
 		String fileName = "chromedriver.exe";
 		String folderPath = "C:\\Users\\ノボル\\git\\AzManga\\AmangaDownLoaderSingle\\lib";
-		
+
 		folderPath = folderPath + File.separator + fileName;
-		
+
 		File file = new File(folderPath);
-		
+
 		if(file.exists()){
-			System.setProperty("webdriver.chrome.driver", folderPath);	
+			System.setProperty("webdriver.chrome.driver", folderPath);
 		}else{
-			
-			
+
+
 			String path = System.getProperty("user.dir");
 			path = path + File.separator + fileName;
-			System.setProperty("webdriver.chrome.driver", path);	
+			System.setProperty("webdriver.chrome.driver", path);
 		}
-		
+
 //		System.setProperty("webdriver.chrome.driver", "C:\\Users\\ノボル\\git\\AzManga\\AmangaDownLoaderSingle\\lib\\chromedriver.exe");
-		
+
 //		System.setProperty("webdriver.chrome.driver", DTO.getReNameListFileCreateFolderPath() + File.separator + "chromedriver.exe");
 	}
 
@@ -422,10 +422,12 @@ public class AzMangaLinkGetV2 {
 	private void copyClipBoad(String str){
 //		String str = "Test"; // 保存するテキスト
 		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+		stop(150);
 		StringSelection selection = new StringSelection(str);
+		stop(150);
 		clipboard.setContents(selection, null);
 	}
-	
+
 	public void getURL_Page_Individual(gamenDTO DTO){
 
 		//個別ブログページを格納するリストを格納する。
