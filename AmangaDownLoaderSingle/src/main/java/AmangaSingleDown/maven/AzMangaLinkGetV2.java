@@ -100,7 +100,7 @@ public class AzMangaLinkGetV2 {
 			commonAP.writeLog("mainGetURL_mainでcreatePreを作りました。"+category,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
 
 			for(String a:createList){
-				copyClipBoad(a);
+//				copyClipBoad(a);
 				commonAP.writeLog(a,DTO.getReNameListFileCreateFolderPath() , CONST.OUTPUT	);
 			}
 
@@ -419,12 +419,12 @@ public class AzMangaLinkGetV2 {
 	}
 
 
-	private void copyClipBoad(String str){
+	private void copyClipBoad(String str,int stopTime){
 //		String str = "Test"; // 保存するテキスト
 		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-		stop(150);
+		stop(stopTime);
 		StringSelection selection = new StringSelection(str);
-		stop(150);
+		stop(stopTime);
 		clipboard.setContents(selection, null);
 	}
 
@@ -481,6 +481,7 @@ public class AzMangaLinkGetV2 {
 			}
 
 			try {
+				copyClipBoad(blogURL,1);
 				getURL(webDriver,blogURL,DTO);
 				getURL_Page_Individual_parts(DTO, webDriver, kobetuBlogURL, createListPre, cateMoji,blogURL);
 			} catch (Exception e) {
