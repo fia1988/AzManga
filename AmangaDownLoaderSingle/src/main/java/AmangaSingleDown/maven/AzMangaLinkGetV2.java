@@ -192,7 +192,7 @@ public class AzMangaLinkGetV2 {
 		String rawFileName = "dead";
 		String rawFileAlive = "2";
 		String[] result = {rawFileName,rawFileAlive};
-
+		copyClipBoad(loaderURL,1);
 		switch (uploaderName){
 			case UPLOADED:
 				result = getUPLOADED(webDriver,loaderURL,DTO);
@@ -481,7 +481,6 @@ public class AzMangaLinkGetV2 {
 			}
 
 			try {
-				copyClipBoad(blogURL,1);
 				getURL(webDriver,blogURL,DTO);
 				getURL_Page_Individual_parts(DTO, webDriver, kobetuBlogURL, createListPre, cateMoji,blogURL);
 			} catch (Exception e) {
