@@ -80,10 +80,18 @@ public class AzMangaLinkGetV2 {
 		commonAP.writeLog("処理開始。",DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
 
 		commonAP.writeLog("createFile作ります。",DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
+		
+		int count = 0;
+		String nokori = "";
 		//各カテゴリごとに漫画ファイルを作成する。
 		for (String category: cateAllay){
-
-
+			nokori = "";
+			for (int i = count ; i < cateAllay.length;i++){
+				nokori = nokori + "," + cateAllay[i];
+			}
+			count++;
+			commonAP.writeLog("残りはこれだけあります。" + nokori,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
+			
 			//個別ブログページを格納するリストを初期化する。
 			kobetuBlogURL = new ArrayList<String>();
 			//createFileに書きこむ内容の編集前。初期化する。
