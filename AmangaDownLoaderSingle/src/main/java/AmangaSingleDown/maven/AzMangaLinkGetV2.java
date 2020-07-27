@@ -92,10 +92,10 @@ public class AzMangaLinkGetV2 {
 			createList = new ArrayList<String>();
 
 			if (category.equals(休憩)){
-				int stopTime = 1000;
+				int stopTime = 15 * 3600 * 1000;
 
 				//引数が休憩の時は処理を止める
-				commonAP.writeLog(stopTime + "ﾐﾘ秒休憩します。。。"+category,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
+				commonAP.writeLog((stopTime/1000) + "秒休憩します。。。"+category,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
 				stop(stopTime);
 			}else{
 				commonAP.writeLog("mainGetURL_mainで次のカテゴリを処理します。"+category,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
