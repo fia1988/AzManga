@@ -26,6 +26,7 @@ public class AzMangaLinkGetV2 {
 	private final String 生ファイル名 = "あ生ファイル名あ";
 //	private final String ファイルキー = "[ファイルキー]";
 	private final String ファイル生死 = "あファイル生死あ";
+	private final String 休憩 = "休憩";
 
 	Random random = new Random();
 
@@ -82,6 +83,7 @@ public class AzMangaLinkGetV2 {
 		//各カテゴリごとに漫画ファイルを作成する。
 		for (String category: cateAllay){
 
+
 			//個別ブログページを格納するリストを初期化する。
 			kobetuBlogURL = new ArrayList<String>();
 			//createFileに書きこむ内容の編集前。初期化する。
@@ -89,22 +91,33 @@ public class AzMangaLinkGetV2 {
 			//createFileに書きこむ内容を保存する。。初期化する。
 			createList = new ArrayList<String>();
 
-			commonAP.writeLog("mainGetURL_mainで次のカテゴリを処理します。"+category,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
-			mainGetURL(end,DTO,category,webDriver,kobetuBlogURL,createListPre);
+			if (category.equals(休憩)){
+				int stopTime = 1000;
 
-			commonAP.writeLog("mainGetURL_mainでcreatePreを作ります。"+category,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
+				//引数が休憩の時は処理を止める
+				commonAP.writeLog(stopTime + "ﾐﾘ秒休憩します。。。"+category,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
+				stop(stopTime);
+			}else{
+				commonAP.writeLog("mainGetURL_mainで次のカテゴリを処理します。"+category,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
+				mainGetURL(end,DTO,category,webDriver,kobetuBlogURL,createListPre);
 
-			//createPreを修正してcreateを作る
-			replaceCreateList(DTO,webDriver,createListPre,createList);
+				commonAP.writeLog("mainGetURL_mainでcreatePreを作ります。"+category,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
 
-			commonAP.writeLog("mainGetURL_mainでcreatePreを作りました。"+category,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
+				//createPreを修正してcreateを作る
+				replaceCreateList(DTO,webDriver,createListPre,createList);
 
-			for(String a:createList){
-//				copyClipBoad(a);
-				commonAP.writeLog(a,DTO.getReNameListFileCreateFolderPath() , CONST.OUTPUT	);
+				commonAP.writeLog("mainGetURL_mainでcreatePreを作りました。"+category,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
+
+				for(String a:createList){
+//					copyClipBoad(a);
+					commonAP.writeLog(a,DTO.getReNameListFileCreateFolderPath() , CONST.OUTPUT	);
+				}
+
+				commonAP.writeLog("mainGetURL_mainで次のカテゴリを処理しました。"+category,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
 			}
 
-			commonAP.writeLog("mainGetURL_mainで次のカテゴリを処理しました。"+category,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
+
+
 		}
 
 
