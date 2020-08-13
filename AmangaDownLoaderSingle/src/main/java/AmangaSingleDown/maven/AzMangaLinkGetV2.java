@@ -20,7 +20,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 
 public class AzMangaLinkGetV2 {
-
+	private final String kugiri = ",___,";
 	private final String UPLOADED =  "Uploaded";
 	private final String Alfafile = "Alfafile";
 	private final String 生ファイル名 = "あ生ファイル名あ";
@@ -80,7 +80,7 @@ public class AzMangaLinkGetV2 {
 		commonAP.writeLog("処理開始。",DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
 
 		commonAP.writeLog("createFile作ります。",DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
-		
+
 		int count = 0;
 		String nokori = "";
 		//各カテゴリごとに漫画ファイルを作成する。
@@ -91,7 +91,7 @@ public class AzMangaLinkGetV2 {
 			}
 			count++;
 			commonAP.writeLog("残りはこれだけあります。" + nokori,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
-			
+
 			//個別ブログページを格納するリストを初期化する。
 			kobetuBlogURL = new ArrayList<String>();
 			//createFileに書きこむ内容の編集前。初期化する。
@@ -311,7 +311,7 @@ public class AzMangaLinkGetV2 {
 		for (String a:createListPre){
 
 			beforeDate = a;
-			String[] aList = a.split(",", 0);
+			String[] aList = a.split(kugiri, 0);
 			//0:生ファイル名
 			//1:ファイル生死
 			String[] uploaderResult = getUploaderList(webDriver,aList[3],aList[1],DTO);
@@ -392,19 +392,19 @@ public class AzMangaLinkGetV2 {
         					//ファイルキー＝ブログURL+ブログ内ファイル名
         					//ファイル生死チェック(1：生きてる、2：死んでる)
         					try {
-
+        						
         						createListPre.add(
-        											cateMoji								 + ","
-        										+	urlElement.get(i).getAttribute("href")	 + ","
-//        										+	(fileNameAllay.length - 1)				 + ","
-        										+	urlElement.size()						 + ","
+        											cateMoji								 + kugiri
+        										+	urlElement.get(i).getAttribute("href")	 + kugiri
+//        										+	(fileNameAllay.length - 1)				 + kugiri
+        										+	urlElement.size()						 + kugiri
 
-        										+ 	loader									 + ","
-        										+	fileNameAllay[i+1]						 + ","
-        										+	生ファイル名							 + ","
-        										+	blogTitle								 + ","
-        										+	blogURL									 + ","
-        										+	blogURL + fileNameAllay[i+1]			 + ","
+        										+ 	loader									 + kugiri
+        										+	fileNameAllay[i+1]						 + kugiri
+        										+	生ファイル名							 + kugiri
+        										+	blogTitle								 + kugiri
+        										+	blogURL									 + kugiri
+        										+	blogURL + fileNameAllay[i+1]			 + kugiri
         										+	ファイル生死
         								);
         					} catch (Exception e) {
