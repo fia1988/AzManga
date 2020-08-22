@@ -59,7 +59,7 @@ public class mainGamen extends JFrame {
 
 		mangaURL = new JTextField("一般漫画");
 		mangaURL = new JTextField("一般漫画,少女漫画,小説,画集,成年書籍,その他,小説-成年書籍");
-		mangaURL = new JTextField("一般漫画,少女漫画,小説,画集,成年書籍,その他");
+		mangaURL = new JTextField("一般漫画,少女漫画,小説,画集,成年書籍,その他,小説-成年書籍,同人誌,連載漫画");
 
 		mangaURL.setColumns(10);
 		mangaURL.setBounds(49, 55, 334, 25);

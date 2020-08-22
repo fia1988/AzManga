@@ -392,7 +392,7 @@ public class AzMangaLinkGetV2 {
         					//ファイルキー＝ブログURL+ブログ内ファイル名
         					//ファイル生死チェック(1：生きてる、2：死んでる)
         					try {
-        						
+
         						createListPre.add(
         											cateMoji								 + kugiri
         										+	urlElement.get(i).getAttribute("href")	 + kugiri
@@ -585,6 +585,14 @@ public class AzMangaLinkGetV2 {
 			  case "成年書籍":
 				  resultMoji="b";
 				    break;
+			  case "同人誌":
+				  resultMoji="d";
+				    break;
+
+			  case "連載漫画":
+				  resultMoji="rm";
+				    break;
+
 			  case "小説-成年書籍":
 				  resultMoji="bn";
 				    break;
