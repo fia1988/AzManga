@@ -100,10 +100,8 @@ public class AzMangaLinkGetV2 {
 			createList = new ArrayList<String>();
 
 			//休憩するかのチェック
-			stopRest(category,DTO);
-			if (category.equals(休憩)){
-
-			}else{
+			if( stopRest(category,DTO) == false){
+				//休憩しない場合はここをとおる
 				commonAP.writeLog("mainGetURL_mainで次のカテゴリを処理します。"+category,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
 				mainGetURL(end,DTO,category,webDriver,kobetuBlogURL,createListPre);
 
@@ -149,7 +147,7 @@ public class AzMangaLinkGetV2 {
 	}
 
 	//
-	private void stopRest(String moji,gamenDTO DTO){
+	private boolean stopRest(String moji,gamenDTO DTO){
 		boolean check = true;
 		int stopTime = 0;
 
@@ -202,6 +200,8 @@ public class AzMangaLinkGetV2 {
 			stop(stopTime);
 		}
 
+		return check;
+		
 	}
 
 	//実行中ファイルを削除する
