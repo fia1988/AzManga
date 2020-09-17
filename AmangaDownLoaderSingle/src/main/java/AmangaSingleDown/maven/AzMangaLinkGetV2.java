@@ -91,7 +91,7 @@ public class AzMangaLinkGetV2 {
 			}
 			count++;
 			commonAP.writeLog("残りはこれだけあります。" + nokori,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
-
+			commonAP.writeLog("残りはこれだけあります。" + nokori,DTO.getReNameListFileCreateFolderPath() , CONST.MOVING	);
 			//個別ブログページを格納するリストを初期化する。
 			kobetuBlogURL = new ArrayList<String>();
 			//createFileに書きこむ内容の編集前。初期化する。
@@ -99,12 +99,10 @@ public class AzMangaLinkGetV2 {
 			//createFileに書きこむ内容を保存する。。初期化する。
 			createList = new ArrayList<String>();
 
+			//休憩するかのチェック
+			stopRest(category,DTO);
 			if (category.equals(休憩)){
-				int stopTime = 15 * 3600 * 1000;
 
-				//引数が休憩の時は処理を止める
-				commonAP.writeLog((stopTime/1000) + "秒休憩します。。。"+category,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
-				stop(stopTime);
 			}else{
 				commonAP.writeLog("mainGetURL_mainで次のカテゴリを処理します。"+category,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
 				mainGetURL(end,DTO,category,webDriver,kobetuBlogURL,createListPre);
@@ -148,6 +146,62 @@ public class AzMangaLinkGetV2 {
 		commonAP.writeLog("処理終了。",DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
 
 		return result;
+	}
+
+	//
+	private void stopRest(String moji,gamenDTO DTO){
+		boolean check = true;
+		int stopTime = 0;
+
+
+
+
+		switch (moji){
+		  case "休憩1":
+			  stopTime = 1;
+		    break;
+		  case "休憩2":
+			  stopTime = 2;
+			    break;
+
+		  case "休憩3":
+			  stopTime = 3;
+			    break;
+
+		  case "休憩4":
+			  stopTime = 4;
+			    break;
+		  case "休憩5":
+			  stopTime = 5;
+			    break;
+		  case "休憩6":
+			  stopTime = 6;
+			    break;
+
+		  case "休憩7":
+			  stopTime = 7;
+			    break;
+
+		  case "休憩8":
+			  stopTime = 8;
+			    break;
+		  case "休憩9":
+			  stopTime = 9;
+			    break;
+
+		  default:
+			  check = false;
+		  break;
+	}
+
+		if (check){
+			stopTime = stopTime * 3600 * 1000;
+
+			//引数が休憩の時は処理を止める
+			commonAP.writeLog((stopTime/3600000) + "時間休憩します。。。"+moji,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
+			stop(stopTime);
+		}
+
 	}
 
 	//実行中ファイルを削除する
