@@ -9,9 +9,11 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -55,6 +57,31 @@ public class AzMangaLinkGetV2 {
 //		System.setProperty("webdriver.chrome.driver", DTO.getReNameListFileCreateFolderPath() + File.separator + "chromedriver.exe");
 	}
 
+
+
+	/**
+	 * タイトル名でウィンドウを切り替える
+	 *
+	 * @param driver
+	 * @param title
+	 * @return
+	 */
+	protected boolean switchToTitleWindow(WebDriver driver, String title) {
+		String currentWindow = driver.getWindowHandle();
+		Set<String> availableWindows = driver.getWindowHandles();
+		if (!availableWindows.isEmpty()) {
+			for (String windowId : availableWindows) {
+				if (driver.switchTo().window(windowId).getTitle().equals(title)) {
+					return true;
+				} else {
+					driver.switchTo().window(currentWindow);
+				}
+			}
+		}
+		return false;
+	}
+
+
 	public String mainGetURL_main(gamenDTO DTO){
 
 		//個別ブログページを格納するリストを格納する。
@@ -74,7 +101,11 @@ public class AzMangaLinkGetV2 {
 		//「,」区切りで一般漫画、小説、少女漫画が入っている
 		String[] cateAllay = DTO.getMangaURL().split(",", 0);
 
+
 		WebDriver webDriver = new ChromeDriver();
+
+
+
 
 		commonAP.writeLog("",DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
 		commonAP.writeLog("処理開始。",DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
@@ -201,7 +232,7 @@ public class AzMangaLinkGetV2 {
 		}
 
 		return check;
-		
+
 	}
 
 	//実行中ファイルを削除する
@@ -237,11 +268,25 @@ public class AzMangaLinkGetV2 {
 		try {
 			stop(random.nextInt(8000));
 			webDriver.get(URL);
+			webDriver.manage().addCookie(new Cookie("__cfduid", "d2a6f6a0d6dafdbd5f022be81ba66b2271599901194"));
+			webDriver.manage().addCookie(new Cookie("__dtsu", "51A0158427729203B632808E7B8F80B5"));
+			webDriver.manage().addCookie(new Cookie("cf_clearance", "de55fbf658d6eb08999b15914580d8eee3509d62-1601547798-0-1z63fa72adz5414ab15z5ae89b2d-150"));
+			webDriver.manage().addCookie(new Cookie("cf_chl_1", "998ad66d3fa6c17"));
+			webDriver.manage().addCookie(new Cookie("cf_chl_1", "c9b349ec2c68103"));
+			webDriver.manage().addCookie(new Cookie("cf_chl_prog", "x15"));
+			webDriver.manage().addCookie(new Cookie("HstCfa2741643", "1584277289587"));
+			webDriver.manage().addCookie(new Cookie("HstCla2741643", "1595485842633"));
+			webDriver.manage().addCookie(new Cookie("HstCmu2741643", "1593426404138"));
+			webDriver.manage().addCookie(new Cookie("HstCns2741643", "34"));
+			webDriver.manage().addCookie(new Cookie("HstCnv2741643", "27"));
+			webDriver.manage().addCookie(new Cookie("HstPn2741643", "4"));
+			webDriver.manage().addCookie(new Cookie("HstPt2741643", "171"));
 
 
 			if (webDriver.getTitle().contains("Just a moment...")){
-				stop(60000);
+
 				commonAP.writeLog("getURLで「Just a moment...」です。1分待ちます。："  + URL,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
+				stop(60000);
 				getURL(webDriver,URL,DTO);
 				return true;
 			}
