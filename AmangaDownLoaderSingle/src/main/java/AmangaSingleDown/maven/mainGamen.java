@@ -78,11 +78,11 @@ public class mainGamen extends JFrame {
 		label.setBounds(459, 21, 151, 19);
 		contentPane.add(label);
 
-		JLabel lblrenamefiletxt = new JLabel("置換ファイル作成場所(" + CONST.MAKEFILE + ")");
+		JLabel lblrenamefiletxt = new JLabel("ログとかの作成フォルダ");
 		lblrenamefiletxt.setBounds(49, 95, 319, 19);
 		contentPane.add(lblrenamefiletxt);
 
-		JLabel label_1 = new JLabel("個別記事URL");
+		JLabel label_1 = new JLabel("cf_clearanceのキー");
 		label_1.setBounds(49, 252, 334, 19);
 		contentPane.add(label_1);
 
@@ -93,7 +93,7 @@ public class mainGamen extends JFrame {
 		reNameListFilePath = new JTextField();
 		reNameListFilePath.setColumns(10);
 		reNameListFilePath.setBounds(49, 276, 334, 25);
-		reNameListFilePath.setText(File.separator + CONST.MAKEFILE);
+		reNameListFilePath.setText("ここにキーをいれる");
 		contentPane.add(reNameListFilePath);
 
 		renamedFolderPath = new JTextField("D:\\01.kabu_backup\\00.dropbox\\Dropbox\\03.漫画");
@@ -109,7 +109,7 @@ public class mainGamen extends JFrame {
 				DTO.setCheckErrLog(false);
 				String DTOresult = setDTO(DTO,true);
 				renameCreateResult.setText(DTOresult);
-				reNameListFilePath.setText(DTO.getReNameListFileCreateFolderPath() + File.separator + CONST.MAKEFILE);
+//				reNameListFilePath.setText(DTO.getReNameListFileCreateFolderPath() + File.separator + CONST.MAKEFILE);
 				renamedFolderPath.setText(DTO.getReNameListFileCreateFolderPath());
 				System.out.println("「01.output.txt」作成処理");
 
@@ -196,6 +196,11 @@ public class mainGamen extends JFrame {
 			if (file.isDirectory()==false){
 				return "フォルダが存在しない";
 			}
+
+			DTO.setHashKey(reNameListFilePath.getText());
+
+
+
 		}else{
 
 			DTO.setReNamedFolderPath(renamedFolderPath.getText());

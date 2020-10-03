@@ -104,63 +104,76 @@ public class AzMangaLinkGetV2 {
 
 		WebDriver webDriver = new ChromeDriver();
 
-
-
+		String firstURL = "http://www.a-zmanga.net/";
+		boolean checkFirstCheck = 	fierstGetURL(webDriver,firstURL,DTO,1);
 
 		commonAP.writeLog("",DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
 		commonAP.writeLog("処理開始。",DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
+		
+		if ( checkFirstCheck == false){
+			commonAP.writeLog("処理異常終了。",DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
+			
+			result = "クッキーERR";
+		}else{
+			//
+			commonAP.writeLog("createFile作ります。",DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
 
-		commonAP.writeLog("createFile作ります。",DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
+			int count = 0;
+			String nokori = "";
+			//各カテゴリごとに漫画ファイルを作成する。
+			for (String category: cateAllay){
+				nokori = "";
+				for (int i = count ; i < cateAllay.length;i++){
+					nokori = nokori + "," + cateAllay[i];
+				}
+				count++;
+				commonAP.writeLog("残りはこれだけあります。" + nokori,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
+				commonAP.writeLog("残りはこれだけあります。" + nokori,DTO.getReNameListFileCreateFolderPath() , CONST.MOVING	);
+				//個別ブログページを格納するリストを初期化する。
+				kobetuBlogURL = new ArrayList<String>();
+				//createFileに書きこむ内容の編集前。初期化する。
+				createListPre = new ArrayList<String>();
+				//createFileに書きこむ内容を保存する。。初期化する。
+				createList = new ArrayList<String>();
 
-		int count = 0;
-		String nokori = "";
-		//各カテゴリごとに漫画ファイルを作成する。
-		for (String category: cateAllay){
-			nokori = "";
-			for (int i = count ; i < cateAllay.length;i++){
-				nokori = nokori + "," + cateAllay[i];
-			}
-			count++;
-			commonAP.writeLog("残りはこれだけあります。" + nokori,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
-			commonAP.writeLog("残りはこれだけあります。" + nokori,DTO.getReNameListFileCreateFolderPath() , CONST.MOVING	);
-			//個別ブログページを格納するリストを初期化する。
-			kobetuBlogURL = new ArrayList<String>();
-			//createFileに書きこむ内容の編集前。初期化する。
-			createListPre = new ArrayList<String>();
-			//createFileに書きこむ内容を保存する。。初期化する。
-			createList = new ArrayList<String>();
+				//休憩するかのチェック
+				if( stopRest(category,DTO) == false){
+					//休憩しない場合はここをとおる
+					commonAP.writeLog("mainGetURL_mainで次のカテゴリを処理します。"+category,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
+					mainGetURL(end,DTO,category,webDriver,kobetuBlogURL,createListPre);
 
-			//休憩するかのチェック
-			if( stopRest(category,DTO) == false){
-				//休憩しない場合はここをとおる
-				commonAP.writeLog("mainGetURL_mainで次のカテゴリを処理します。"+category,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
-				mainGetURL(end,DTO,category,webDriver,kobetuBlogURL,createListPre);
+					commonAP.writeLog("mainGetURL_mainでcreatePreを作ります。"+category,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
 
-				commonAP.writeLog("mainGetURL_mainでcreatePreを作ります。"+category,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
+					//createPreを修正してcreateを作る
+					replaceCreateList(DTO,webDriver,createListPre,createList);
 
-				//createPreを修正してcreateを作る
-				replaceCreateList(DTO,webDriver,createListPre,createList);
+					commonAP.writeLog("mainGetURL_mainでcreatePreを作りました。"+category,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
 
-				commonAP.writeLog("mainGetURL_mainでcreatePreを作りました。"+category,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
+					for(String a:createList){
+//						copyClipBoad(a);
+						commonAP.writeLog(a,DTO.getReNameListFileCreateFolderPath() , CONST.OUTPUT	);
+					}
 
-				for(String a:createList){
-//					copyClipBoad(a);
-					commonAP.writeLog(a,DTO.getReNameListFileCreateFolderPath() , CONST.OUTPUT	);
+					commonAP.writeLog("mainGetURL_mainで次のカテゴリを処理しました。"+category,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
 				}
 
-				commonAP.writeLog("mainGetURL_mainで次のカテゴリを処理しました。"+category,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
 			}
-
-
-
+			
+			commonAP.writeLog("createFile作りました。",DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
+			
 		}
 
 
 
 
+		
 
 
-		commonAP.writeLog("createFile作りました。",DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
+
+
+
+
+
 		webDriver.close();
 
 
@@ -264,23 +277,56 @@ public class AzMangaLinkGetV2 {
 		try {Thread.sleep(timer);} catch (InterruptedException a) {a.printStackTrace();}
 	}
 
+	private boolean fierstGetURL(WebDriver webDriver,String URL,gamenDTO DTO,int counter){
+
+		if (counter > 10 ){
+			commonAP.writeLog("fierstGetURLでクッキーエラー。cf_clearanceを最新化してください。",DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
+			return false;
+		}
+
+		try {
+
+			webDriver.get(URL);
+			webDriver.manage().addCookie(new Cookie("cf_clearance", DTO.getHashKey()));
+			stop(5000);
+		} catch (TimeoutException e) {
+			stop(8000);
+			fierstGetURL(webDriver,URL,DTO,counter);
+		} catch (Exception e) {
+			commonAP.writeLog(URL,DTO.getReNameListFileCreateFolderPath() , CONST.NO_ACCESS	);
+			return false;
+		}
+
+		if (webDriver.getTitle().contains("Just a moment...")){
+
+			commonAP.writeLog("fierstGetURLで「Just a moment...」です。1分待ちます。："  + URL,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
+			stop(60000);
+			fierstGetURL(webDriver , URL , DTO , counter + 1 );
+			return false;
+		}
+
+
+		return true;
+	}
+
 	private boolean getURL(WebDriver webDriver,String URL,gamenDTO DTO){
 		try {
 			stop(random.nextInt(8000));
 			webDriver.get(URL);
-			webDriver.manage().addCookie(new Cookie("__cfduid", "d2a6f6a0d6dafdbd5f022be81ba66b2271599901194"));
-			webDriver.manage().addCookie(new Cookie("__dtsu", "51A0158427729203B632808E7B8F80B5"));
-			webDriver.manage().addCookie(new Cookie("cf_clearance", "de55fbf658d6eb08999b15914580d8eee3509d62-1601547798-0-1z63fa72adz5414ab15z5ae89b2d-150"));
-			webDriver.manage().addCookie(new Cookie("cf_chl_1", "998ad66d3fa6c17"));
-			webDriver.manage().addCookie(new Cookie("cf_chl_1", "c9b349ec2c68103"));
-			webDriver.manage().addCookie(new Cookie("cf_chl_prog", "x15"));
-			webDriver.manage().addCookie(new Cookie("HstCfa2741643", "1584277289587"));
-			webDriver.manage().addCookie(new Cookie("HstCla2741643", "1595485842633"));
-			webDriver.manage().addCookie(new Cookie("HstCmu2741643", "1593426404138"));
-			webDriver.manage().addCookie(new Cookie("HstCns2741643", "34"));
-			webDriver.manage().addCookie(new Cookie("HstCnv2741643", "27"));
-			webDriver.manage().addCookie(new Cookie("HstPn2741643", "4"));
-			webDriver.manage().addCookie(new Cookie("HstPt2741643", "171"));
+//			webDriver.manage().addCookie(new Cookie("__cfduid", "d2a6f6a0d6dafdbd5f022be81ba66b2271599901194"));
+//			webDriver.manage().addCookie(new Cookie("__dtsu", "51A0158427729203B632808E7B8F80B5"));
+//			webDriver.manage().addCookie(new Cookie("cf_clearance", "de55fbf658d6eb08999b15914580d8eee3509d62-1601547798-0-1z63fa72adz5414ab15z5ae89b2d-150"));
+//			webDriver.manage().addCookie(new Cookie("cf_clearance", DTO.getHashKey()));
+//			webDriver.manage().addCookie(new Cookie("cf_chl_1", "998ad66d3fa6c17"));
+//			webDriver.manage().addCookie(new Cookie("cf_chl_1", "c9b349ec2c68103"));
+//			webDriver.manage().addCookie(new Cookie("cf_chl_prog", "x15"));
+//			webDriver.manage().addCookie(new Cookie("HstCfa2741643", "1584277289587"));
+//			webDriver.manage().addCookie(new Cookie("HstCla2741643", "1595485842633"));
+//			webDriver.manage().addCookie(new Cookie("HstCmu2741643", "1593426404138"));
+//			webDriver.manage().addCookie(new Cookie("HstCns2741643", "34"));
+//			webDriver.manage().addCookie(new Cookie("HstCnv2741643", "27"));
+//			webDriver.manage().addCookie(new Cookie("HstPn2741643", "4"));
+//			webDriver.manage().addCookie(new Cookie("HstPt2741643", "171"));
 
 
 			if (webDriver.getTitle().contains("Just a moment...")){

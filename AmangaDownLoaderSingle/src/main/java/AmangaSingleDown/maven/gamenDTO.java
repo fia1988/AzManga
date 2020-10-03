@@ -7,6 +7,7 @@ public class gamenDTO {
 	String reNameListFileCreateFolderPath;
 	String reNamedFolderPath;
 	String mangaURL;
+	String hashKey;
 	int mangURL_page;
 
 	boolean checkErrLog = false;
@@ -14,6 +15,12 @@ public class gamenDTO {
 
 
 
+	public String getHashKey() {
+		return hashKey;
+	}
+	public void setHashKey(String hashKey) {
+		this.hashKey = hashKey;
+	}
 	public boolean isCheckErrLog() {
 		return checkErrLog;
 	}
