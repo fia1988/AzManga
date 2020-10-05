@@ -131,8 +131,8 @@ public class mainGamen extends JFrame {
 				}
 
 
-				reNameListFilePath.setText(DTO.getReNameListFileCreateFolderPath() + File.separator + CONST.MAKEFILE);
-				renamedFolderPath.setText(DTO.getReNameListFileCreateFolderPath());
+//				reNameListFilePath.setText(DTO.getReNameListFileCreateFolderPath() + File.separator + CONST.MAKEFILE);
+//				renamedFolderPath.setText(DTO.getReNameListFileCreateFolderPath());
 			}
 		});
 		button.setBounds(48, 181, 216, 27);

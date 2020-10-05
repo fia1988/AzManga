@@ -104,15 +104,17 @@ public class AzMangaLinkGetV2 {
 
 		WebDriver webDriver = new ChromeDriver();
 
-		String firstURL = "http://www.a-zmanga.net/";
-		boolean checkFirstCheck = 	fierstGetURL(webDriver,firstURL,DTO,1);
+
 
 		commonAP.writeLog("",DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
 		commonAP.writeLog("処理開始。",DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
-		
+
+		String firstURL = "http://www.a-zmanga.net/";
+		boolean checkFirstCheck = 	fierstGetURL(webDriver,firstURL,DTO,1);
+
 		if ( checkFirstCheck == false){
 			commonAP.writeLog("処理異常終了。",DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
-			
+
 			result = "クッキーERR";
 		}else{
 			//
@@ -158,15 +160,15 @@ public class AzMangaLinkGetV2 {
 				}
 
 			}
-			
+
 			commonAP.writeLog("createFile作りました。",DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
-			
+
 		}
 
 
 
 
-		
+
 
 
 
@@ -279,7 +281,7 @@ public class AzMangaLinkGetV2 {
 
 	private boolean fierstGetURL(WebDriver webDriver,String URL,gamenDTO DTO,int counter){
 
-		if (counter > 10 ){
+		if (counter > 5 ){
 			commonAP.writeLog("fierstGetURLでクッキーエラー。cf_clearanceを最新化してください。",DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
 			return false;
 		}
@@ -299,8 +301,8 @@ public class AzMangaLinkGetV2 {
 
 		if (webDriver.getTitle().contains("Just a moment...")){
 
-			commonAP.writeLog("fierstGetURLで「Just a moment...」です。1分待ちます。："  + URL,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
-			stop(60000);
+			commonAP.writeLog("fierstGetURLで「Just a moment...」です。15秒待ちます。："  + URL,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
+			stop(5000);
 			fierstGetURL(webDriver , URL , DTO , counter + 1 );
 			return false;
 		}
