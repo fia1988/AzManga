@@ -129,8 +129,8 @@ public class AzMangaLinkGetV2 {
 					nokori = nokori + "," + cateAllay[i];
 				}
 				count++;
-				commonAP.writeLog("残りはこれだけあります。" + nokori,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
-				commonAP.writeLog("残りはこれだけあります。" + nokori,DTO.getReNameListFileCreateFolderPath() , CONST.MOVING	);
+				commonAP.writeLog("残りはこれだけあります。" + nokori + " :使ってるクッキー：" + DTO.getHashKey(),DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
+				commonAP.writeLog("残りはこれだけあります。" + nokori + " :使ってるクッキー：" + DTO.getHashKey(),DTO.getReNameListFileCreateFolderPath() , CONST.MOVING	);
 				//個別ブログページを格納するリストを初期化する。
 				kobetuBlogURL = new ArrayList<String>();
 				//createFileに書きこむ内容の編集前。初期化する。
@@ -302,9 +302,15 @@ public class AzMangaLinkGetV2 {
 		if (webDriver.getTitle().contains("Just a moment...")){
 
 			commonAP.writeLog("fierstGetURLで「Just a moment...」です。15秒待ちます。："  + URL,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
-			stop(5000);
+			stop(15000);
 			fierstGetURL(webDriver , URL , DTO , counter + 1 );
 			return false;
+		}
+		
+		String checkURL = "http://www.a-zmanga.net/?__cf_chl_jschl_tk__=d67c49f4bd35b03e4f23eaaae238f311bbbafb53-1595066523-0-AbJg6ikZQ2THqGjkqZFq3_N8hO8fbCs_UKw3BUDq4XrmtI_sl7_-ay1k1pbAScM4Qjb6dnExJkuddRvI_p_DXFHLhu-0azC3juplT5Y4AmFYytnWU4VpqbtfjHIoE5ARtjMUGv_oSUu9E9g7EpWIf0pgrxhoskxxs6pJrx0Irn19AlEgRCJ2sV1s30WPKBugPu2tib6hWYHqMTR4QTOy1_8Ucg02ikn4k1R1aX7Rzl5QJK6I7edwmgLxXCAmrVu_-yfL78_XBpTJDwQ_pNZvSj4";
+		
+		if (webDriver.getCurrentUrl().contains(checkURL)){
+			
 		}
 
 
