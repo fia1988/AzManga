@@ -25,6 +25,10 @@ public class AzMangaLinkGetV2 {
 	private final String kugiri = ",___,";
 	private final String UPLOADED =  "Uploaded";
 	private final String Alfafile = "Alfafile";
+	private final String Nitroflare = "Nitroflare";
+	private final String Alfalife = "Alfalife";
+
+
 	private final String 生ファイル名 = "あ生ファイル名あ";
 //	private final String ファイルキー = "[ファイルキー]";
 	private final String ファイル生死 = "あファイル生死あ";
@@ -152,9 +156,9 @@ public class AzMangaLinkGetV2 {
 					commonAP.writeLog("mainGetURL_mainでcreatePreを作りました。"+category,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
 
 					for(String a:createList){
-//						copyClipBoad(a);
 						commonAP.writeLog(a,DTO.getReNameListFileCreateFolderPath() , CONST.OUTPUT	);
 					}
+
 
 					commonAP.writeLog("mainGetURL_mainで次のカテゴリを処理しました。"+category,DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
 				}
@@ -306,11 +310,11 @@ public class AzMangaLinkGetV2 {
 			fierstGetURL(webDriver , URL , DTO , counter + 1 );
 			return false;
 		}
-		
+
 		String checkURL = "http://www.a-zmanga.net/?__cf_chl_jschl_tk__=d67c49f4bd35b03e4f23eaaae238f311bbbafb53-1595066523-0-AbJg6ikZQ2THqGjkqZFq3_N8hO8fbCs_UKw3BUDq4XrmtI_sl7_-ay1k1pbAScM4Qjb6dnExJkuddRvI_p_DXFHLhu-0azC3juplT5Y4AmFYytnWU4VpqbtfjHIoE5ARtjMUGv_oSUu9E9g7EpWIf0pgrxhoskxxs6pJrx0Irn19AlEgRCJ2sV1s30WPKBugPu2tib6hWYHqMTR4QTOy1_8Ucg02ikn4k1R1aX7Rzl5QJK6I7edwmgLxXCAmrVu_-yfL78_XBpTJDwQ_pNZvSj4";
-		
+
 		if (webDriver.getCurrentUrl().contains(checkURL)){
-			
+
 		}
 
 
@@ -359,23 +363,27 @@ public class AzMangaLinkGetV2 {
 
 	//0:生ファイル名
 	//1:ファイル生死
-	private String[] getUploaderList(WebDriver webDriver,String uploaderName,String loaderURL,gamenDTO DTO){
+	private String[] getUploaderList(WebDriver webDriver,String uploaderName,String loaderURL,gamenDTO DTO,String fileName){
 
 		//		生ファイル名;
 		//		ファイル生死;1生きてる、２死んでる
 		String rawFileName = "dead";
 		String rawFileAlive = "2";
 		String[] result = {rawFileName,rawFileAlive};
-		copyClipBoad(loaderURL,1);
 		switch (uploaderName){
 			case UPLOADED:
-				result = getUPLOADED(webDriver,loaderURL,DTO);
+				result = getUPLOADED(webDriver,loaderURL,DTO,fileName);
 				break;
 			case Alfafile:
-				result = getAlfafile(webDriver,loaderURL,DTO);
+				result = getAlfafile(webDriver,loaderURL,DTO,fileName);
 //				rawFileName = resultLoader[0];
 //				rawFileAlive = resultLoader[1];
 
+				break;
+
+			case Nitroflare:
+				stop(random.nextInt(8000));
+				result = getNitroflare(webDriver,loaderURL,DTO,fileName);
 				break;
 			default:
 
@@ -385,9 +393,18 @@ public class AzMangaLinkGetV2 {
 	}
 
 
+	private String[] getNitroflare(WebDriver webDriver,String loaderURL,gamenDTO DTO,String fileName){
+
+
+		String rawFileAlive = "2";
+		rawFileAlive = "1";
+		String[] result = {fileName,rawFileAlive};
+		return result;
+	}
+
 	//0:生ファイル名
 	//1:ファイル生死
-	private String[] getUPLOADED(WebDriver webDriver,String loaderURL,gamenDTO DTO){
+	private String[] getUPLOADED(WebDriver webDriver,String loaderURL,gamenDTO DTO,String fileName){
 
 		getURL(webDriver,loaderURL,DTO);
 		//生ファイル名;
@@ -411,7 +428,7 @@ public class AzMangaLinkGetV2 {
 
 	//0:生ファイル名
 	//1:ファイル生死
-	private String[] getAlfafile(WebDriver webDriver,String loaderURL,gamenDTO DTO){
+	private String[] getAlfafile(WebDriver webDriver,String loaderURL,gamenDTO DTO,String fileName){
 
 		getURL(webDriver,loaderURL,DTO);
 
@@ -456,6 +473,7 @@ public class AzMangaLinkGetV2 {
 		int count = 1;
 		int maxcount = createListPre.size();
 
+		String copyLetter = "";
 
 		String beforeDate = "";
 
@@ -465,9 +483,13 @@ public class AzMangaLinkGetV2 {
 
 			beforeDate = a;
 			String[] aList = a.split(kugiri, 0);
+
+			//copyする文字を作る
+			copyLetter = copyLetter + kugiri + aList[1];
+
 			//0:生ファイル名
 			//1:ファイル生死
-			String[] uploaderResult = getUploaderList(webDriver,aList[3],aList[1],DTO);
+			String[] uploaderResult = getUploaderList(webDriver,aList[3],aList[1],DTO,aList[4]);
 			aList[5] = uploaderResult[0];
 			aList[9] = uploaderResult[1];
 //			//あっぷろだ先のファイル名
@@ -483,7 +505,7 @@ public class AzMangaLinkGetV2 {
 			}
 			count++;
 		}
-
+		copyClipBoad(copyLetter, 1);
 		commonAP.writeLog("replaceCreateList処理完了。。。" + (count - 1 ) + " / " + maxcount + "。",DTO.getReNameListFileCreateFolderPath() , CONST.LOGFILE	);
 
 	}
@@ -524,6 +546,7 @@ public class AzMangaLinkGetV2 {
         for (String loader : getUploaderList()){
 
         	for (WebElement element: targetElement ){
+
         		if (element.getText().contains(loader)) {
         			List<WebElement> urlElement = element.findElements(By.tagName("a"));
         			String[] fileNameAllay = element.getText().split("\n", 0);
@@ -763,9 +786,11 @@ public class AzMangaLinkGetV2 {
 
 
 	private String[] getUploaderList(){
-		String[] uploader = {UPLOADED,Alfafile};
+		String[] uploader = {Nitroflare,Alfafile,Alfalife,UPLOADED};
 		return uploader;
 	}
+
+
 
 
 
