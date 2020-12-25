@@ -462,7 +462,7 @@ public class AzMangaLinkGetV2 {
 			//0:漫画ノベルチェック（漫画：m、ノベル：n、その他：o、特殊：b）
 			//1:DL_URL
 			//2:ページ内ファイル数
-			//3:アップローダー名
+			//3:アップローダー名_雑誌チェック文字_タグ
 			//4:ブログ内ファイル名
 			//5:￥生ファイル名
 			//6:ブログファイルタイトル
@@ -541,6 +541,21 @@ public class AzMangaLinkGetV2 {
         List<WebElement> listelements = webDriver.findElements(By.className("entry-content"));
         List<WebElement> targetElement = listelements.get(0).findElements(By.tagName("p"));
 
+        List<WebElement> tagElements = webDriver.findElements(By.className("cat-links"));
+
+        List<WebElement> zassiCheckElement1 = listelements.get(0).findElements(By.tagName("strong"));
+
+        String zassiCheck = zassiCheckElement1.size() + "-";
+        for (WebElement element: zassiCheckElement1 ){
+        	zassiCheck = zassiCheck + element.getText();
+        }
+
+        String tagCheck = tagElements.size()+"-" + tagElements.get(0).getText();
+        tagCheck = tagCheck.replaceAll("Posted in:","");
+        tagCheck = tagCheck.replaceAll(" ","");
+        tagCheck = tagCheck.replaceAll("　","");
+
+
         //ローダーのループ
         //getUploaderList();にはローダーの一覧が入っている
         for (String loader : getUploaderList()){
@@ -560,7 +575,7 @@ public class AzMangaLinkGetV2 {
         					//漫画ノベルチェック（漫画：m、ノベル：n、その他：o、特殊：b）
         					//DL_URL
         					//ページ内ファイル数
-        					//アップローダー名
+        					//アップローダー名_雑誌チェック文字_タグ
         					//ブログ内ファイル名
         					//生ファイル名
         					//ブログファイルタイトル
@@ -575,7 +590,7 @@ public class AzMangaLinkGetV2 {
 //        										+	(fileNameAllay.length - 1)				 + kugiri
         										+	urlElement.size()						 + kugiri
 
-        										+ 	loader									 + kugiri
+        										+ 	loader + "_" + zassiCheck + "_" + tagCheck	 + kugiri
         										+	fileNameAllay[i+1]						 + kugiri
         										+	生ファイル名							 + kugiri
         										+	blogTitle								 + kugiri
