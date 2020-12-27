@@ -22,7 +22,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 
 public class AzMangaLinkGetV2 {
-	private final String kugiri = ",___,";
+	private final String kugiri1 = ",___,";
+	private final String kugiri2 = ",____,";
 	private final String UPLOADED =  "Uploaded";
 	private final String Alfafile = "Alfafile";
 	private final String Nitroflare = "Nitroflare";
@@ -370,7 +371,11 @@ public class AzMangaLinkGetV2 {
 		String rawFileName = "dead";
 		String rawFileAlive = "2";
 		String[] result = {rawFileName,rawFileAlive};
-		switch (uploaderName){
+		
+		String[] loaderSplit = uploaderName.split(kugiri2, -1);
+		String thisLoaderName = loaderSplit[0];
+		
+		switch (thisLoaderName){
 			case UPLOADED:
 				result = getUPLOADED(webDriver,loaderURL,DTO,fileName);
 				break;
@@ -482,10 +487,10 @@ public class AzMangaLinkGetV2 {
 		for (String a:createListPre){
 
 			beforeDate = a;
-			String[] aList = a.split(kugiri, 0);
+			String[] aList = a.split(kugiri1, 0);
 
 			//copyする文字を作る
-			copyLetter = copyLetter + kugiri + aList[1];
+			copyLetter = copyLetter + kugiri1 + aList[1];
 
 			//0:生ファイル名
 			//1:ファイル生死
@@ -585,17 +590,17 @@ public class AzMangaLinkGetV2 {
         					try {
 
         						createListPre.add(
-        											cateMoji								 + kugiri
-        										+	urlElement.get(i).getAttribute("href")	 + kugiri
+        											cateMoji								 + kugiri1
+        										+	urlElement.get(i).getAttribute("href")	 + kugiri1
 //        										+	(fileNameAllay.length - 1)				 + kugiri
-        										+	urlElement.size()						 + kugiri
+        										+	urlElement.size()						 + kugiri1
 
-        										+ 	loader + "_" + zassiCheck + "_" + tagCheck	 + kugiri
-        										+	fileNameAllay[i+1]						 + kugiri
-        										+	生ファイル名							 + kugiri
-        										+	blogTitle								 + kugiri
-        										+	blogURL									 + kugiri
-        										+	blogURL + fileNameAllay[i+1]			 + kugiri
+        										+ 	loader + kugiri2 + zassiCheck + kugiri2 + tagCheck	 + kugiri1
+        										+	fileNameAllay[i+1]						 + kugiri1
+        										+	生ファイル名							 + kugiri1
+        										+	blogTitle								 + kugiri1
+        										+	blogURL									 + kugiri1
+        										+	blogURL + fileNameAllay[i+1]			 + kugiri1
         										+	ファイル生死
         								);
         					} catch (Exception e) {
