@@ -401,10 +401,22 @@ public class AzMangaLinkGetV2 {
 	private String[] getNitroflare(WebDriver webDriver,String loaderURL,gamenDTO DTO,String fileName){
 
 
+//		String rawFileAlive = "2";
+//		rawFileAlive = "1";
+//		String[] result = {fileName,rawFileAlive};
+//		return result;
+		
+		
+		return commonUploader(DTO,fileName);
+		
+	}
+	
+	private String[] commonUploader(gamenDTO DTO,String fileName){
 		String rawFileAlive = "2";
 		rawFileAlive = "1";
 		String[] result = {fileName,rawFileAlive};
 		return result;
+		
 	}
 
 	//0:生ファイル名
@@ -435,29 +447,32 @@ public class AzMangaLinkGetV2 {
 	//1:ファイル生死
 	private String[] getAlfafile(WebDriver webDriver,String loaderURL,gamenDTO DTO,String fileName){
 
-		getURL(webDriver,loaderURL,DTO);
-
-		//生ファイル名;
-		//ファイル生死;1生きてる、２死んでる
-		String rawFileName = "dead";
-		String rawFileAlive = "2";
-
-		try {
-//			org.openqa.selenium.NoSuchElementException
-	        List<WebElement> Alelements = webDriver.findElements(By.className("title"));
-	        //webDriver.getTitle() == ページが見つかりません | Alfafile.net
-	        webDriver.getTitle();
-	        WebElement AlaTag = Alelements.get(0).findElement(By.tagName("strong"));
-	        rawFileName = AlaTag.getAttribute("title");
-	        rawFileAlive = "1";
-		} catch (Exception NoSuchElementException) {
-			rawFileName = "dead";
-			rawFileAlive = "2";
-		}
-		String[] result = {rawFileName,rawFileAlive};
-
-
-		return result;
+		
+		return commonUploader(DTO,fileName);
+		
+//		getURL(webDriver,loaderURL,DTO);
+//
+//		//生ファイル名;
+//		//ファイル生死;1生きてる、２死んでる
+//		String rawFileName = "dead";
+//		String rawFileAlive = "2";
+//
+//		try {
+////			org.openqa.selenium.NoSuchElementException
+//	        List<WebElement> Alelements = webDriver.findElements(By.className("title"));
+//	        //webDriver.getTitle() == ページが見つかりません | Alfafile.net
+//	        webDriver.getTitle();
+//	        WebElement AlaTag = Alelements.get(0).findElement(By.tagName("strong"));
+//	        rawFileName = AlaTag.getAttribute("title");
+//	        rawFileAlive = "1";
+//		} catch (Exception NoSuchElementException) {
+//			rawFileName = "dead";
+//			rawFileAlive = "2";
+//		}
+//		String[] result = {rawFileName,rawFileAlive};
+//
+//
+//		return result;
 	}
 
 
