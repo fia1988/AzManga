@@ -28,7 +28,7 @@ public class AzMangaLinkGetV2 {
 	private final String Alfafile = "Alfafile";
 	private final String Nitroflare = "Nitroflare";
 	private final String Alfalife = "Alfalife";
-
+	private final String Alfafile2 = "Alfafil×e";
 
 	private final String 生ファイル名 = "あ生ファイル名あ";
 //	private final String ファイルキー = "[ファイルキー]";
@@ -371,10 +371,10 @@ public class AzMangaLinkGetV2 {
 		String rawFileName = "dead";
 		String rawFileAlive = "2";
 		String[] result = {rawFileName,rawFileAlive};
-		
+
 		String[] loaderSplit = uploaderName.split(kugiri2, -1);
 		String thisLoaderName = loaderSplit[0];
-		
+
 		switch (thisLoaderName){
 			case UPLOADED:
 				result = getUPLOADED(webDriver,loaderURL,DTO,fileName);
@@ -385,9 +385,15 @@ public class AzMangaLinkGetV2 {
 //				rawFileAlive = resultLoader[1];
 
 				break;
+			case Alfafile2:
+				result = getAlfafile(webDriver,loaderURL,DTO,fileName);
+				break;
+			case Alfalife:
+				result = getAlfafile(webDriver,loaderURL,DTO,fileName);
+				break;
 
 			case Nitroflare:
-				stop(random.nextInt(8000));
+//				stop(random.nextInt(8000));
 				result = getNitroflare(webDriver,loaderURL,DTO,fileName);
 				break;
 			default:
@@ -405,18 +411,18 @@ public class AzMangaLinkGetV2 {
 //		rawFileAlive = "1";
 //		String[] result = {fileName,rawFileAlive};
 //		return result;
-		
-		
+
+
 		return commonUploader(DTO,fileName);
-		
+
 	}
-	
+
 	private String[] commonUploader(gamenDTO DTO,String fileName){
 		String rawFileAlive = "2";
 		rawFileAlive = "1";
 		String[] result = {fileName,rawFileAlive};
 		return result;
-		
+
 	}
 
 	//0:生ファイル名
@@ -447,9 +453,9 @@ public class AzMangaLinkGetV2 {
 	//1:ファイル生死
 	private String[] getAlfafile(WebDriver webDriver,String loaderURL,gamenDTO DTO,String fileName){
 
-		
+
 		return commonUploader(DTO,fileName);
-		
+
 //		getURL(webDriver,loaderURL,DTO);
 //
 //		//生ファイル名;
@@ -503,9 +509,8 @@ public class AzMangaLinkGetV2 {
 
 			beforeDate = a;
 			String[] aList = a.split(kugiri1, 0);
-
 			//copyする文字を作る
-			copyLetter = copyLetter + kugiri1 + aList[1];
+			copyLetter = copyLetter +"," + aList[1];
 
 			//0:生ファイル名
 			//1:ファイル生死
@@ -821,7 +826,7 @@ public class AzMangaLinkGetV2 {
 
 
 	private String[] getUploaderList(){
-		String[] uploader = {Nitroflare,Alfafile,Alfalife,UPLOADED};
+		String[] uploader = {Nitroflare,Alfafile,Alfalife,UPLOADED,Alfafile2};
 		return uploader;
 	}
 
